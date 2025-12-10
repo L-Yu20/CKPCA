@@ -1,26 +1,53 @@
-## Repository Structure
+## Directory Structure
 
-### change
-This directory contains the following files:
-- **choose**: Utilities for parameter selection in the CKPCA method.
-- **generate**: Scripts for generating simulated data with change points.
-- **real_cp**: Code for change point analysis on real-world datasets.
-- **simu_data**: Storage for simulated datasets.
-- **simulation_cp**: Scripts for conducting change point analysis on the simulated data.
+### `change/`
+This directory contains the following components:
 
-### cluster
-This directory includes:
-- **real_clus**: Code for clustering analysis on real datasets.
-- **simulation_clus**: Code for clustering analysis on simulated datasets.
+- **choose/**  
+  Utilities for parameter selection in CKPCA.
 
-### plot
-Contains the code for generating the figures used in the paper.
+- **generate/**  
+  Code for generating simulated change-point data.
 
-### dataset
-Includes the real-world datasets used in the paper.
+- **real_cp/**  
+  Scripts for analyzing change points in real datasets.
 
-### pca_python
-Contains Python implementations of the KCP and Multirank methods for change point detection.
+- **simu_data/**  
+  Storage for simulated datasets.
 
-### randi
-Includes the code for computing the Rand Index.
+- **simulation_cp/**  
+  Scripts for change-point detection experiments on simulated data.
+
+- **pca_python/**  
+  Python implementations of the KCP and Multirank change-point methods.
+
+For the change-point simulation experiments, you should first generate synthetic data using the code in the `generate/` directory, and then run the corresponding change-point detection procedures.
+
+---
+
+### `cluster/`
+This directory contains:
+
+- **real_clus/**  
+  Scripts for clustering analyses on real datasets.
+
+- **simulation_clus/**  
+  Scripts for clustering analyses using simulated data.
+
+Note: The MNIST dataset is not included due to its large size. You can download it from:  
+http://yann.lecun.com/exdb/mnist/
+
+---
+
+### `plot/`
+This directory contains the code used to generate the figures in the paper.
+
+---
+
+### `dataset/`
+This directory contains the real datasets used in the study.
+
+---
+
+### `randi/`
+Code for computing the Rand Index.
