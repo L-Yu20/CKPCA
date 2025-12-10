@@ -34,9 +34,6 @@ This directory contains:
 - **simulation_clus/**  
   Scripts for clustering analyses using simulated data.
 
-Note: The MNIST dataset is not included due to its large size. You can download it from:  
-http://yann.lecun.com/exdb/mnist/
-
 ---
 
 ### `plot/`
@@ -46,6 +43,9 @@ This directory contains the code used to generate the figures in the paper.
 
 ### `dataset/`
 This directory contains the real datasets used in the study.
+
+Note: The MNIST dataset is not included due to its large size. You can download it from:  
+http://yann.lecun.com/exdb/mnist/
 
 ---
 
