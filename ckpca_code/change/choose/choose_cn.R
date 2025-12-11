@@ -1,4 +1,4 @@
-### Choose Beta (ckpca + ecp) evaluation
+### Choose cn (ckpca + ecp) evaluation
 
 library(tictoc)
 library(MASS)
@@ -213,3 +213,4 @@ write.csv(res, file_name)
 res
 
 toc()
+
