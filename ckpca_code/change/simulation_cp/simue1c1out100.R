@@ -1,4 +1,4 @@
-##corrected kernel pca change point for example2
+##corrected kernel pca change point for example1
 library(tictoc)
 library(MASS)
 library('ecp')
@@ -433,3 +433,4 @@ res
 
 
 toc()
+
