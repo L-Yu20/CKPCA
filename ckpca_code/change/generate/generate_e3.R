@@ -12,7 +12,7 @@ library(abind)
 
 ## Basic parameter settings
 n = 800
-times = 2
+times = 1000
 u = 0.5
 
 ## choose model
@@ -102,4 +102,5 @@ for (kkk in 1:times) {
 big_array = abind(mat_list, along = 3)
 print(dim(big_array))
 npySave(file_name, big_array)
+
 
