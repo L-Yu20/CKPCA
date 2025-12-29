@@ -1,4 +1,4 @@
-###kernel pca change point
+### Choose m
 library(tictoc)
 library(MASS)
 library('ecp')
@@ -205,3 +205,4 @@ write.csv(res, "E:/choosem.csv")
 res
 
 toc()
+
