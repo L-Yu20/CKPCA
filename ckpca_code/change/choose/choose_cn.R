@@ -17,7 +17,7 @@ tic()
 n = 800        # number of samples
 px = 100       # dimension
 tau = 0.5      # tau for TRR
-times = 2   # number of experiments
+times = 1000   # number of experiments
 type = "ba"    # "ba" for balanced, "im" for imbalanced
 case = 1
 
@@ -213,4 +213,5 @@ write.csv(res, file_name)
 res
 
 toc()
+
 
