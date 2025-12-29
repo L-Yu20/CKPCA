@@ -36,7 +36,7 @@ source("E:/ckpca_code/randi.R")
 flat_vec = npyLoad(npy_file)
 big_array1 = array(flat_vec, dim = c(n, px, times))
 
-## Candidate block sizes (beta_n)
+## Candidate block sizes (c_n)
 cn0 = c(
   0.02,0.2,2 
 )
@@ -213,5 +213,6 @@ write.csv(res, file_name)
 res
 
 toc()
+
 
 
