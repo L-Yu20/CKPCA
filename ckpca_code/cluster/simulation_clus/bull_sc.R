@@ -7,6 +7,9 @@ library(clue)
 library(sparcl)
 library(kernlab)
 library(tictoc)
+library(reticulate)
+py_require("scikit-learn")
+sk_cluster <- import("sklearn.cluster", convert = TRUE)
 
 times = 1000
 v = 0
@@ -23,6 +26,7 @@ nn3 = 600
 # nn2 = 500
 # nn3 = 600
 
+
 d1 = nn1
 d2 = nn2 - nn1
 d3 = nn3 - nn2
@@ -36,38 +40,35 @@ ri2 = matrix(ncol = 1, nrow = times)
 ri3 = matrix(ncol = 1, nrow = times)
 cluster1 = matrix(nrow = n, ncol = repeat1)
 
+reticulate::py_set_seed(22)
 
-SpectralClustering <- function(data, num_clusters) {
-  #' Conducts spectral clustering algorithm.
-  #'
-  #' @description This function implements spectral clustering algorithm.
-  #'
-  #' It conducts k-means on top k left singular vectors of the data matrix.
-  #'
-  #' @param data matrix. Input data matrix for clustering.
-  #' @param num_clusters int. Number of clusters.
-  #' @usage SpectralClustering(data, num_clusters)
-  #' @return A vector containing the cluster assignment after iterations.
-  #' @references T. Liu, Y. Lu, B. Zhu, H. Zhao (2021). High-dimensional Clustering via Feature Selection with
-  #' Applications to Single Cell RNA-seq Data.
-  #' @examples
-  #' synthetic_data <- GenerateSyntheticData(n = 10, p = 10, s = 5, k = 2, signal_strength = 1, noise_type = "gaussian")
-  #' label.est <- SpectralClustering(synthetic_data$data, 2)
-  #' @export
-  data.svd = svd(data)
-  r = min(dim(data)[1], dim(data)[2], num_clusters)
-  kmeans.result = kmeans(
-    data.svd$u[, 1:r],
-    centers = num_clusters,
-    iter.max = 200,
-    nstart = 100
+SpectralClustering <- function(data, num_clusters,
+                               assign_labels = "discretize",
+                               n_components = 10L,
+                               gamma = 0.1,
+                               random_state = 22) {
+  data <- as.matrix(data)
+  
+  model <- sk_cluster$SpectralClustering(
+    n_clusters = as.integer(num_clusters),
+    assign_labels = assign_labels,
+    n_components = as.integer(n_components),
+    gamma = gamma,
+    random_state = as.integer(random_state)
   )
-  return(kmeans.result$cluster)
+  
+  labels <- model$fit_predict(data)
+  
+  return(as.integer(labels) + 1L)
 }
+
 
 tic()
 
 for (time in 1:times){
+  cat("Running iteration:", time, "\n")
+  set.seed(1111 + time)
+
   ##data setting
   mu1 = rep(0, px)
   sigma1 = diag(rep(1, px))
@@ -126,11 +127,28 @@ for (time in 1:times){
   cc = k %*% B1
   cc = t(cc)
   cc = Re(cc)
-  # cluster1[, 1] = SpectralClustering(t(cc), kinds)
-  cluster1[, 1] = SpectralClustering(x, kinds)
+  cluster1[, 1] = SpectralClustering(
+    x, kinds,
+    assign_labels = "discretize",
+    n_components = 3L,
+    gamma = 0.1
+  )
   
-  ##spe
-  cluster2 = SpectralClustering(t(cc), kinds)
+  ##sc
+  cluster2 = SpectralClustering(
+    t(cc), kinds,
+    assign_labels = "discretize",
+    n_components = 10L,
+    gamma = 0.1
+  )
+  
+  cluster3 = SpectralClustering(
+    x, kinds,
+    assign_labels = "discretize",
+    n_components = 10L,
+    gamma = 0.1
+  )
+  
   
   ##iteration
   for (order in 2:repeat1){
@@ -204,13 +222,14 @@ for (time in 1:times){
     cc = k %*% B
     cc = t(cc)  
     cc = Re(cc)
-    # rest1 = pam(t(cc), kinds)
-    # cluster1[, order] = rest1$clustering
-    cluster1[, order] = SpectralClustering(t(cc), kinds)
+    cluster1[, order] = SpectralClustering(
+      t(cc), kinds,
+      assign_labels = "discretize",
+      n_components = 3L,
+      gamma = 0.1
+    )
   }
   
-  
-
   
   #rand index
   rri = matrix(nrow = 1, ncol = repeat1)
@@ -285,7 +304,7 @@ for (time in 1:times){
   index0[(nn2 + 1):nn3] = 3
   randindex = matrix(nrow = 1, ncol = repeat1)
   all0 = n * (n - 1) / 2
-  index = cluster1[, 1]
+  index = cluster3
   tp = 0
   tn = 0
   for (jj in 2:n){

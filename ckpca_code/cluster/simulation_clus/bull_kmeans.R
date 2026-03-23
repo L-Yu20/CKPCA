@@ -34,6 +34,8 @@ cluster1 = matrix(nrow = n, ncol = repeat1)
 tic()
 
 for (time in 1:times){
+  cat("Running iteration:", time, "\n")
+  set.seed(1111 + time)
   ##data setting
   mu1 = rep(0, px)
   sigma1 = diag(rep(1, px))
@@ -91,13 +93,12 @@ for (time in 1:times){
   B1 = evector1[, 1:(hatq)]
   cc = k %*% B1
   cc = t(cc)
-  ###kmeans(x)
+  ###kmeans
   cluster2 = kmeans(t(cc), kinds)$cluster
   
   ###
   rest1 = kmeans(x, kinds)
   cluster1[, 1] = rest1$cluster
-  
   
   ##iteration
   for (order in 2:repeat1){

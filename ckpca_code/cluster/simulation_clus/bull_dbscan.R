@@ -12,7 +12,7 @@ v = 0
 px = 10  ## 10 or 100
 n = 600
 
-##Balanced dataset
+# ##Balanced dataset
 nn1 = 200
 nn2 = 400
 nn3 = 600
@@ -100,11 +100,11 @@ for (time in 1:times){
   cc = t(cc)
   cc = Re(cc)
   ##bdscan
-  aa = dbscan(t(cc), eps = 0.2, MinPts = 5)
+  aa = dbscan(t(cc), eps = 1, MinPts = 5)
   cluster2 = aa$cluster
   
   ###
-  aa = dbscan(x, eps = 0.2, MinPts = 5)
+  aa = dbscan(x, eps = 1, MinPts = 5)
   cluster1[, 1] = aa$cluster
 
 
@@ -180,13 +180,11 @@ for (time in 1:times){
     cc = k %*% B
     cc = t(cc)  
     cc = Re(cc)
-    aa = dbscan(t(cc), eps = 0.2, MinPts = 5)
+    aa = dbscan(t(cc), eps = 1, MinPts = 5)
     cluster1[, order] = aa$cluster
   }
   
   
-
-
   #rand index
   rri = matrix(nrow = 1, ncol = repeat1)
   for (kk in 2:repeat1){

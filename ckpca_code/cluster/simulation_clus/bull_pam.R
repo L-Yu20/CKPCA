@@ -35,6 +35,8 @@ cluster1 = matrix(nrow = n, ncol = repeat1)
 tic()
 
 for (time in 1:times){
+  cat("Running iteration:", time, "\n")
+  set.seed(1111 + time)
   ##data setting
   mu1 = rep(0, px)
   sigma1 = diag(rep(1, px))
