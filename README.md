@@ -156,4 +156,4 @@ This directory contains the real datasets used in the study.
 
 ### `randi/`
 
-This directory contains the code for computing the Rand Index.
+Code for computing the Rand Index.
