@@ -6,6 +6,10 @@ library('mvtnorm')
 library("mclust")
 library("fpc")
 library("R.matlab")
+library(tictoc)
+
+tic()
+
 times = 50
 set.seed(22)
 ri2 = matrix(ncol = 1,nrow = times)
@@ -13,14 +17,18 @@ ri1 = matrix(ncol = 1,nrow = times)
 ri0 = matrix(ncol = 1,nrow = times)
 dataset1 = read.csv(file = 'E:\\ckpca_code\\dataset\\mnist\\mnist_test.csv',header = F)
 dataset2 = read.csv(file = 'E:\\ckpca_code\\dataset\\mnist\\mnist_train.csv',header = F)
+
+
+
 dataset = rbind(dataset1,dataset2)
 y0 = dataset[,1]
-ak0 = 0.2
-ak1 = 5
-bk0 = 0.035
-bk1 = 6
-ck0 = 0.2
-ck1 = 5
+## for DBSCANC
+eps0 = 0.01
+## for DBSCANP
+eps1 = 1
+## for DBSCAN
+eps2 = 1
+
 w6 = which(y0 == 6)
 w8 = which(y0 == 8)
 w9 = which(y0 == 9)
@@ -37,6 +45,7 @@ y1[(cl1+1):cl2] = 2
 y1[(cl2+1):cl3] = 3
 
 for (time in 1:times){
+  cat("Running iteration:", time, "\n")
   ## Random sampling
   rj1 = sample(1:length(w6),nl1,replace  =  FALSE)
   rj2 = sample(1:length(w8),nl2,replace  =  FALSE)
@@ -107,12 +116,17 @@ for (time in 1:times){
   cc = k%*%B1
   cc = Re(cc)
   cc = t(cc)
-  aa = dbscan(x, eps = ak0, MinPts = ak1)
+  aa = dbscan(x, eps = eps0, MinPts = 5)
   cluster1[,1] = aa$cluster
   
-  ## dbscan(x)
-  aa = dbscan(t(cc), eps = ck0, MinPts = ck1)
+  ## dbscanp
+  aa = dbscan(t(cc), eps = eps1, MinPts = 5)
   cluster2 = aa$cluster
+  
+  ##
+  aa = dbscan(x, eps = eps2, MinPts = 5)
+  cluster3 = aa$cluster
+  
   
   ## iteration
   for (order in 2:repeat1){
@@ -186,7 +200,7 @@ for (time in 1:times){
     cc = k%*%B
     cc = t(cc)  
     cc = Re(cc)
-    aa = dbscan(t(cc), eps = bk0, MinPts = bk1)
+    aa = dbscan(t(cc), eps = eps0, MinPts = 5)
     cluster1[,order] = aa$cluster
   }
   
@@ -256,7 +270,7 @@ for (time in 1:times){
   index = matrix(nrow = 1,ncol = n)
   index0 = matrix(nrow = 1,ncol = n)
   index0 = y1
-  index = cluster1[,1]
+  index = cluster3
   tp = 0
   tn = 0
   for (jj in 2:n){
@@ -288,5 +302,9 @@ result = rbind(
   c(mri2, sd2)
 )
 
+
 write.csv(result, file = "E:/mndbscan.csv")
+
+
+toc()
 

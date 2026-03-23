@@ -6,6 +6,10 @@ library('mvtnorm')
 library("mclust")
 library("fpc")
 library("R.matlab")
+library(reticulate)
+py_require("scikit-learn")
+sk_cluster <- import("sklearn.cluster", convert = TRUE)
+
 times = 50
 set.seed(22)
 ri2 = matrix(ncol = 1, nrow = times)
@@ -15,6 +19,16 @@ dataset1 = read.csv(file = 'E:\\ckpca_code\\dataset\\mnist\\mnist_test.csv', hea
 dataset2 = read.csv(file = 'E:\\ckpca_code\\dataset\\mnist\\mnist_train.csv', header = F)
 dataset = rbind(dataset1, dataset2)
 y0 = dataset[, 1]
+
+## for SCC
+gamma0 = 0.01
+## for SCP
+gamma1 = 10
+## for SC
+gamma2 = 0.05
+
+
+
 w6 = which(y0 == 6)
 w8 = which(y0 == 8)
 w9 = which(y0 == 9)
@@ -30,36 +44,31 @@ y1[1:cl1] = 1
 y1[(cl1 + 1):cl2] = 2
 y1[(cl2 + 1):cl3] = 3
 
-SpectralClustering <- function(data, num_clusters) {
-  #' Conducts spectral clustering algorithm.
-  #'
-  #' @description This function implements spectral clustering algorithm.
-  #'
-  #' It conducts k-means on top k left singular vectors of the data matrix.
-  #'
-  #' @param data matrix. Input data matrix for clustering.
-  #' @param num_clusters int. Number of clusters.
-  #' @usage SpectralClustering(data, num_clusters)
-  #' @return A vector containing the cluster assignment after iterations.
-  #' @references T. Liu, Y. Lu, B. Zhu, H. Zhao (2021). High-dimensional Clustering via Feature Selection with
-  #' Applications to Single Cell RNA-seq Data.
-  #' @examples
-  #' synthetic_data <- GenerateSyntheticData(n=10, p=10, s=5, k=2, signal_strength=1, noise_type="gaussian")
-  #' label.est <- SpectralClustering(synthetic_data$data, 2)
-  #' @export
-  data.svd = svd(data)
-  r = min(dim(data)[1], dim(data)[2], num_clusters)
-  kmeans.result = kmeans(
-    data.svd$u[, 1:r],
-    centers = num_clusters,
-    iter.max = 200,
-    nstart = 100
+reticulate::py_set_seed(22)
+
+SpectralClustering <- function(data, num_clusters,
+                               assign_labels = "discretize",
+                               n_components = 10L,
+                               gamma = 0.1,
+                               random_state = 22) {
+  data <- as.matrix(data)
+  
+  model <- sk_cluster$SpectralClustering(
+    n_clusters = as.integer(num_clusters),
+    assign_labels = assign_labels,
+    n_components = as.integer(n_components),
+    gamma = gamma,
+    random_state = as.integer(random_state)
   )
-  return(kmeans.result$cluster)
+  
+  labels <- model$fit_predict(data)
+  
+  return(as.integer(labels) + 1L)
 }
 
 
 for (time in 1:times){
+  cat("Running iteration:", time, "\n")
   ## Random sampling
   rj1 = sample(1:length(w6), nl1, replace = FALSE)
   rj2 = sample(1:length(w8), nl2, replace = FALSE)
@@ -146,11 +155,45 @@ for (time in 1:times){
   cc = t(cc)
   cc = Re(cc)
   
-  cluster1[, 1] = SpectralClustering(x, kinds)
   
-  ## spe
-  cluster2 = SpectralClustering(t(cc), kinds)
+  cluster1[, 1] <- tryCatch({
+    SpectralClustering(
+      x, kinds,
+      assign_labels = "discretize",
+      n_components = 3L,
+      gamma = gamma0
+    )
+  }, error = function(e) {
+    message("SpectralClustering error: returning all 1s")
+    rep(1, n)
+  })
   
+  
+  ## scp
+  cluster2 <- tryCatch({
+    SpectralClustering(
+      t(cc), kinds,
+      assign_labels = "discretize",
+      n_components = 10L,
+      gamma = gamma1
+    )
+  }, error = function(e) {
+    message("SpectralClustering error: returning all 1s")
+    rep(1, n)
+  })
+  
+  ##sc
+  cluster3 <- tryCatch({
+    SpectralClustering(
+      x, kinds,
+      assign_labels = "discretize",
+      n_components = 10L,
+      gamma = gamma2
+    )
+  }, error = function(e) {
+    message("SpectralClustering error: returning all 1s")
+    rep(1, n)
+  })
   
   ## iteration
   for (order in 2:repeat1) {
@@ -238,7 +281,21 @@ for (time in 1:times){
     cc = t(cc)
     cc = Re(cc)
     
-    cluster1[, order] = SpectralClustering(t(cc), kinds)
+    cluster_result <- tryCatch({
+      SpectralClustering(
+        t(cc), kinds,
+        assign_labels = "discretize",
+        n_components = 3L,
+        gamma = gamma0
+      )
+    }, error = function(e) {
+      message("SpectralClustering error: using previous result")
+      return(cluster1[, order - 1])
+    })
+    
+    cluster1[, order] <- cluster_result
+    
+    
   }
   
   
@@ -315,7 +372,7 @@ for (time in 1:times){
   index = matrix(nrow = 1, ncol = n)
   index0 = matrix(nrow = 1, ncol = n)
   index0 = y1
-  index = cluster1[, 1]
+  index = cluster3
   tp = 0
   tn = 0
   
@@ -328,7 +385,7 @@ for (time in 1:times){
   }
   ri2[time] = (tp + tn) / all0
   
- 
+  
 }
 
 
