@@ -1,6 +1,6 @@
 To run the simulation studies, you first need to generate the data.
 
-You can use the scripts in `generate/`. For example, to run Experiment 1, you can first run:
+You can use the scripts in `generate/`. For example, to run Example 1, you can first run:
 
 `generate_e1.R`
 
@@ -8,7 +8,7 @@ In this script:
 
 - `times` represents the number of simulation repetitions;
 - `px` represents the data dimension;
-- `case` corresponds to the case settings in Experiment 1 of the paper;
+- `case` corresponds to the case settings in Example 1 of the paper;
 - `type` can be set to `ba` or `im`, representing the balanced and imbalanced settings, respectively.
 
 The generated data are stored in `big_array`, and the command
@@ -25,16 +25,16 @@ The purpose of storing the data in `.npy` format is to make it convenient for yo
 
 If the generated data are large, saving them in `.npy` format may require substantial memory. In that case, you may reduce the value of `times`. If you only use the R implementations, saving the `.npy` files is optional, and you may skip this step.
 
-To generate the data for Experiments 2 and 3, you can run:
+To generate the data for Examples 2 and 3, you can run:
 
 - `generate_e2.R`
 - `generate_e3.R`
 
-To generate the outlier setting in Experiment 1, you can run:
+To generate the outlier setting in Example 1, you can run:
 
 - `generate_e1out.R`
 
-After generating the data, you can run the scripts in `simulation_cp/`. For example, for Experiment 1, you may run:
+After generating the data, you can run the scripts in `simulation_cp/`. For example, for Example 1, you may run:
 
 `simue1c1ba100.R`
 
@@ -42,9 +42,9 @@ You need to make sure that the basic settings in `simue1c1ba100.R`, such as `px`
 
 Similarly:
 
-- for Experiment 2, you may run `simue2a4ba100.R`;
-- for Experiment 3, you may run `simue3ba100.R`;
-- for the outlier setting in Experiment 1, you may run `simue1c1out100.R`.
+- for Example 2, you may run `simue2a4ba100.R`;
+- for Example 3, you may run `simue3ba100.R`;
+- for the outlier setting in Example 1, you may run `simue1c1out100.R`.
 
 It is also worth mentioning that the codes for **KCP** and **Multirank** are located in `pca_python/`, and you need to run these methods in Python.
 
