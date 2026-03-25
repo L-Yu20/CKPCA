@@ -26,7 +26,7 @@ file_tag = paste0("e3", type, px)        # e.g., "e3ba200"
 file_name = paste0(save_path, file_tag, ".npy")
 
 # Filename explanation:
-# e3  stands for experiment 3
+# e3  stands for Example 3
 # ba  stands for balanced data
 # 100 stands for px = 100
 
