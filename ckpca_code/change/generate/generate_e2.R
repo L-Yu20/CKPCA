@@ -24,7 +24,7 @@ save_path = "E:/ckpca_code/change/simu_data/"  ## base path
 file_tag = paste0("e2", "a", af, type, px)      # e.g., "e2a4ba200"
 file_name = paste0(save_path, file_tag, ".npy") # full path
 # Filename explanation:
-# e2  stands for experiment 2
+# e2  stands for Example 2
 # a4   stands for af = 4
 # ba  stands for balanced data
 # 100 stands for px = 100
