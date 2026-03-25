@@ -21,7 +21,7 @@ save_path = "E:/ckpca_code/change/simu_data/"  ## base path
 file_tag_out = paste0("e1", "c", case, "out", px)  # e.g., "e1c1out100"
 file_name = paste0(save_path, file_tag_out, ".npy")     # full path to .npy file
 # Filename explanation:
-# e1  stands for experiment 1
+# e1  stands for Example 1
 # c1  stands for case 1
 # out  stands for data with outliers
 # 100 stands for px = 100
