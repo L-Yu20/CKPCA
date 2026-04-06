@@ -182,15 +182,17 @@ cc4 = t(x)
 kk1 = c(n1, n2, n3, n4, n5, n6, n7)
 
 ## plot the figure
-plot(x[, 1], cex.axis = 1.5, cex.lab = 1.5)
+par(mar = c(5, 4.7, 2, 2) + 0.1)
+
+plot(x[, 1], ylab = expression(X[i*1]), cex.axis = 1.5, cex.lab = 1.5)
 title(main = "Changes in distribution", cex.main = 1.5)
 abline(v = kk1, lty = 2, col = 'red')
 
-plot(cc1[1, 1:n], ylab = "f(X)", cex.axis = 1.5, cex.lab = 1.5)
+plot(cc1[1, 1:n], ylab = expression(f[1*n](X[i])), cex.axis = 1.5, cex.lab = 1.5)
 title(main = "Changes in distribution (CKPCA)", cex.main = 1.5)
 abline(v = kk1, lty = 2, col = 'red')
 
-plot(cc2[1, 1:n], ylab = "f(X)", cex.axis = 1.5, cex.lab = 1.5)
+plot(cc2[1, 1:n], ylab = expression(f[1*n](X[i])), cex.axis = 1.5, cex.lab = 1.5)
 title(main = "Changes in distribution (KPCA)", cex.main = 1.5)
 abline(v = kk1, lty = 2, col = 'red')
 
