@@ -152,6 +152,7 @@ plot(cc1[, 1], ann = F, xaxt = "n")
 axis(1, at = c(1995, 2000, 2005, 2010, 2015, 2020),
      labels = c("1995", "2000", "2005", "2010", "2015", "2020"))
 title(xlab = "Time")
+title(ylab = expression(f[1*n](X[i])))
 title("The U.S. Macroeconomic data")
 kk2 = kk1
 kk1 = kk1 / 12 + 1992 + 2 / 12

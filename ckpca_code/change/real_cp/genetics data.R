@@ -105,7 +105,10 @@ kk1 = output1$estimates
 ##plot the figure
 kk = length(kk1)
 kk1 = kk1[2:(kk - 1)]
+
+par(mar = c(5, 4.7, 2, 2) + 0.1)
+
 plot(cc1[1, 1:2215], main = "The E-Divisive method after dimension reduction",
      xlab = "Index",
-     ylab = expression(paste("B"["1n"]^"T", "X"["i"])))
+     ylab = expression(f[1*n](X[i])) )
 abline(v = kk1, lty = 2, col = 'red')
