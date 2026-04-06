@@ -16,8 +16,8 @@ ri2 = matrix(ncol = 1, nrow = times)
 ri1 = matrix(ncol = 1, nrow = times)
 ri0 = matrix(ncol = 1, nrow = times)
 
-dataset1 = read.csv(file = 'C:\\Users\\yly\\Desktop\\ckpca_code\\dataset\\mnist\\mnist_test.csv', header = F)
-dataset2 = read.csv(file = 'C:\\Users\\yly\\Desktop\\ckpca_code\\dataset\\mnist\\mnist_train.csv', header = F)
+dataset1 = read.csv(file = 'E:\\ckpca_code\\dataset\\mnist\\mnist_test.csv', header = F)
+dataset2 = read.csv(file = 'E:\\ckpca_code\\dataset\\mnist\\mnist_train.csv', header = F)
 dataset = rbind(dataset1, dataset2)
 
 y0 = dataset[, 1]
@@ -328,20 +328,20 @@ B = evector[,1:(hatq)]
 cc = k %*% B
 cc10 = cc
 
-
+par(mar = c(5, 4.7, 2, 2) + 0.1)
 
 plot(cc10[1:(n/3),1], cc10[1:(n/3),2],
      pch = 16, col = "#E41A1C",
      axes = FALSE,
-     ylab=expression(paste("B"["2n"]^"T","X"["i"])),
-     xlab=expression(paste("B"["1n"]^"T","X"["i"])),
+     ylab = expression(f[2*n](X[i])),
+     xlab = expression(f[1*n](X[i])),
      xlim = c(-2.15, 2.5), ylim = c(-2, 2),
      cex.axis = 1.1, cex.lab = 1.2)
 box(col = "black")
 axis(1, col = "black", cex.axis = 1.1)
 axis(2, col = "black", cex.axis = 1.1)
-title(main = "Scatter plot after dimension reduction (CKPCA)",
-      cex.main = 1.3)
+title(main = "Scatter plot (CKPCA)",
+      cex.main = 1.5)
 
 points(cc10[(n/3+1):(n*2/3),1], cc10[(n/3+1):(n*2/3),2],
        pch = 17, col = "#377EB8")
@@ -354,18 +354,20 @@ points(cc10[(n*2/3+1):n,1], cc10[(n*2/3+1):n,2],
 
 ## kpca
 cc20 = t(cc201)
+
+par(mar = c(5, 4.7, 2, 2) + 0.1)
 plot(cc20[1:(n/3),1], cc20[1:(n/3),2],
      pch = 16, col = "#E41A1C",
      axes = FALSE,
-     ylab = expression(italic("X")["i2"]),
-     xlab = expression(italic("X")["i1"]),
+     ylab = expression(f[2*n](X[i])),
+     xlab = expression(f[1*n](X[i])),
      xlim = c(-3, 3), ylim = c(-3, 3),
      cex.axis = 1.1, cex.lab = 1.2)
 box(col = "black")
 axis(1, col = "black", cex.axis = 1.1)
 axis(2, col = "black", cex.axis = 1.1)
-title(main = "Scatter plot after dimension reduction (KPCA)",
-      cex.main = 1.3)
+title(main = "Scatter plot (KPCA)",
+      cex.main = 1.5)
 
 points(cc20[(n/3+1):(n*2/3),1], cc20[(n/3+1):(n*2/3),2],
        pch = 17, col = "#377EB8")
@@ -386,18 +388,21 @@ B = evector[, 1:(hatq)]
 cc301 = t(B) %*% t(x)
 
 cc30 =t(cc301)
+
+par(mar = c(5, 4.7, 2, 2) + 0.1)
+
 plot(cc30[1:(n/3),1], cc30[1:(n/3),2],
      pch = 16, col = "#E41A1C",
      axes = FALSE,
-     ylab = expression(italic("X")["i2"]),
-     xlab = expression(italic("X")["i1"]),
+     ylab=expression(paste("B"["2n"]^"T","X"["i"])),
+     xlab=expression(paste("B"["1n"]^"T","X"["i"])),
      xlim = c(-15, 15), ylim = c(-15, 15),
      cex.axis = 1.1, cex.lab = 1.2)
 box(col = "black")
 axis(1, col = "black", cex.axis = 1.1)
 axis(2, col = "black", cex.axis = 1.1)
-title(main = "Scatter plot after dimension reduction (PCA)",
-      cex.main = 1.3)
+title(main = "Scatter plot (PCA)",
+      cex.main = 1.5)
 
 points(cc30[(n/3+1):(n*2/3),1], cc30[(n/3+1):(n*2/3),2],
        pch = 17, col = "#377EB8")
