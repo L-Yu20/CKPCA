@@ -54,7 +54,7 @@ Similarly:
 - for Example 3, you may run `simue3ba100.R`;
 - for the outlier setting in Example 1, you may run `simue1c1out100.R`.
 
-It is also worth mentioning that the codes for **KCP** and **Multirank** are located in `pca_python/`, and you need to run these methods in Python.
+It is also worth mentioning that the scripts for **KCP** and **Multirank** are located in `pca_python/`, and you need to run these methods in Python.
 
 In addition, you may use the scripts in `choose/` to conduct the parameter sensitivity analysis reported in the paper.
 
